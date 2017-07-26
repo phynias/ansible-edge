@@ -2,7 +2,7 @@
 
 set -e
 
-NODE_RUNNER_HOME=/etc/ansible 
+NODE_RUNNER_HOME=/opt/ansible-edge
 
 function bailout() {
 	echo "node-runner: $*" >&2
@@ -10,28 +10,7 @@ function bailout() {
 }
 
 git=/usr/bin/git
-
-
-if [ -d "$NODE_RUNNER_HOME" ]; then
-	source $NODE_RUNNER_HOME/node-runner.cf
-else
-	echo "$0: \$NODE_RUNNER_HOME is not a directory." >&2
-	exit 1
-fi
-
 [ -x $git ] || bailout "Can't find $git or is not executable"
 
-cd $NODE_RUNNER_HOME
-$git pull --quiet
-
-# Re-read our config, as it may have changed after pull
-
-source $NODE_RUNNER_HOME/node-runner.cf
-
-# todo: maybe check md5sum of node-runner.sh before and after pull to
-# decide if we want to re-exec node-runner.sh :) 
-
-
 # Run the playbook
-
-ansible-playbook ${playbook}
+ansible-pull -o -C master -d $NODE_RUNNER_HOME -i $NODE_RUNNER_HOME/hosts -U https://github.com/phynias/ansible-edge.git >> /var/log/ansible-pull.log 2>&1
