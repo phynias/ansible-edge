@@ -4,11 +4,6 @@ set -e
 
 NODE_RUNNER_HOME=/opt/ansible-edge
 
-function bailout() {
-	echo "node-runner: $*" >&2
-	exit 2
-}
-
 git=/usr/bin/git
 [ -x $git ] || bailout "Can't find $git or is not executable"
 
