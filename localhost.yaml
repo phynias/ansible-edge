@@ -1,0 +1,15 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - name: Installs nginx web server
+      apt: pkg=nginx state=installed update_cache=true
+      notify:
+        - start nginx
+
+    - name: Upload default index.html for host
+      copy: src=node/nginx/index.html dest=/usr/share/nginx/www/ mode=0644
+
+  handlers:
+    - name: start nginx
+      service: name=nginx state=started
