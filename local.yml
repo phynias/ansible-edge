@@ -8,7 +8,7 @@
         - start nginx
 
     - name: Upload default index.html for host
-      copy: src=node/nginx/index.html dest=/usr/share/nginx/www/ mode=0644
+      copy: src=node/nginx/index.html dest=/var/www/html/ mode=0644
 
   handlers:
     - name: start nginx
